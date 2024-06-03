@@ -32,8 +32,7 @@ class RemoteDataSource {
       final response = await _dio.get(endpoint);
       return response;
     } on DioException catch (e) {
-      if (e.response!.statusCode == 401) handleUnauthorized();
-
+      _handleError(e);
       throw e.response?.data['message'] ?? e.error.toString();
     } catch (e) {
       rethrow;
@@ -50,9 +49,7 @@ class RemoteDataSource {
       final response = await _dio.post(endpoint, data: body);
       return response;
     } on DioException catch (e) {
-      print('DIO Exception');
-      if (e.response!.statusCode == 401 && !noPop) handleUnauthorized();
-
+      _handleError(e);
       throw e.response?.data['message'] ?? e.error.toString();
     } catch (e) {
       print('Exception');
@@ -68,8 +65,7 @@ class RemoteDataSource {
       final response = await _dio.post(endpoint, data: body);
       return response;
     } on DioException catch (e) {
-      if (e.response!.statusCode == 401) handleUnauthorized();
-
+      _handleError(e);
       throw e.response?.data['message'] ?? e.error.toString();
     } catch (e) {
       rethrow;
@@ -81,6 +77,21 @@ class RemoteDataSource {
 
     if (token != null && token.isNotEmpty) {
       _dio.options.headers['Authorization'] = 'Bearer $token';
+    }
+  }
+
+  _handleError(DioException e) {
+    if (e.type == DioExceptionType.connectionError) {
+      throw 'Silahkan periksa jaringan anda';
+    }
+
+    if (e.type == DioExceptionType.connectionTimeout) {
+      throw 'Silahkan periksa jaringan anda';
+    }
+
+    if (e.response!.statusCode == 401) {
+      handleUnauthorized();
+      return;
     }
   }
 }

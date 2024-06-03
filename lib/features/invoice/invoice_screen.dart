@@ -23,7 +23,7 @@ class InvoiceScreen extends GetView<InvoiceController> {
                 context: context,
                 builder: (context) => CustomAlertDialog(
                   title: 'Print Invoice',
-                  message: 'To be develop later in BLI with me',
+                  message: 'To be develop later by me in BLI',
                   onConfirm: () {
                     Get.back();
                   },

@@ -111,7 +111,7 @@ class OrderDetailController extends GetxController {
         .firstWhere((element) => element.name == selectedPrivilege.value);
 
     totalPrice -= (totalPrice * privilege.discountPercent / 100);
-    totalPrice -= (totalPrice * 11 / 100);
+    totalPrice += (totalPrice * 11 / 100);
 
     return totalPrice;
   }

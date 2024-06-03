@@ -26,7 +26,7 @@ class HomeScreen extends GetView<HomeController> {
           onTap: (p0) {
             Get.back();
 
-            if (p0 == 10) {
+            if (p0 == 9) {
               controller.logout();
             } else {
               controller.currentIndex(p0);

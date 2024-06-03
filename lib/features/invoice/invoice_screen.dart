@@ -1,6 +1,7 @@
 import 'package:bgr_logistik/core_imports.dart';
 import 'package:flutter/services.dart';
 
+import '../../shared/widgets/alert_dialog.dart';
 import 'invoice_controller.dart';
 
 class InvoiceScreen extends GetView<InvoiceController> {
@@ -15,9 +16,22 @@ class InvoiceScreen extends GetView<InvoiceController> {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
-      appBar: AppBar(
-        title: const Text('Invoice'),
-      ),
+      appBar: AppBar(title: const Text('Invoice'), actions: [
+        InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => CustomAlertDialog(
+                  title: 'Print Invoice',
+                  message: 'To be develop later in BLI with me',
+                  onConfirm: () {
+                    Get.back();
+                  },
+                ),
+              );
+            },
+            child: const Icon(Icons.print)),
+      ]),
       body: Container(
         width: double.infinity,
         height: double.infinity,

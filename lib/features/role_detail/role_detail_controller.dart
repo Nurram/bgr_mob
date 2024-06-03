@@ -29,6 +29,22 @@ class RoleDetailController extends GetxController {
     }
   }
 
+  _getPermissionsNew() async {
+    isLoading(true);
+
+    try {
+      final response = await repo.getPermissionsNew();
+      permissions.clear();
+      permissions.addAll(response.data);
+
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      Get.back();
+      Utils.showGetSnackbar(e.toString(), false);
+    }
+  }
+
   @override
   void onInit() async {
     final args = Get.arguments;
@@ -36,8 +52,10 @@ class RoleDetailController extends GetxController {
     if (args != null) {
       role(args);
       nameCtr.text = role.value!.name;
+      await _getPermissions(id: role.value!.id);
+    } else {
+      await _getPermissionsNew();
     }
-    await _getPermissions(id: role.value!.id);
 
     super.onInit();
   }
@@ -66,7 +84,10 @@ class RoleDetailController extends GetxController {
     isLoading(true);
 
     try {
-      await repo.insert(name: nameCtr.text);
+      await repo.insert(
+        name: nameCtr.text,
+        permissions: permissions,
+      );
 
       isLoading(false);
       Get.back(result: true);

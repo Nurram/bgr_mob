@@ -17,7 +17,7 @@ class PaymentMethodRepository {
   insert({required String name}) async {
     try {
       await _remoteDataSource
-          .post(endpoint: '/paymentMethod/insert', body: {'name': name});
+          .post(endpoint: '/paymentMethod/insert', body: {'method': name});
     } catch (e) {
       rethrow;
     }

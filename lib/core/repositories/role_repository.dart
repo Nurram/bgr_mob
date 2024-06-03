@@ -1,4 +1,5 @@
 import 'package:bgr_logistik/core_imports.dart';
+import 'package:bgr_logistik/models/permissions_response.dart';
 import 'package:bgr_logistik/models/roles_response.dart';
 
 import '../../models/role_permission_response.dart';
@@ -16,10 +17,14 @@ class RoleRepository {
     }
   }
 
-  insert({required String name}) async {
+  insert(
+      {required String name,
+      required List<RolePermissionDatum> permissions}) async {
     try {
-      await _remoteDataSource
-          .post(endpoint: '/roles/insert', body: {'name': name});
+      await _remoteDataSource.post(endpoint: '/roles/insert', body: {
+        'name': name,
+        'permissions': permissions,
+      });
     } catch (e) {
       rethrow;
     }
@@ -57,6 +62,30 @@ class RoleRepository {
       );
 
       return RolePermissionResponse.fromJson(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<RolePermissionResponse> getPermissionsNew() async {
+    try {
+      final response = await _remoteDataSource.get(endpoint: '/permissions');
+
+      final responsData = PermissionsResponse.fromJson(response.data);
+      final responseDatums = <RolePermissionDatum>[];
+
+      for (var element in responsData.data) {
+        final responseDatum = RolePermissionDatum(
+            id: element.id, name: element.name, isActive: 0);
+        responseDatums.add(responseDatum);
+      }
+
+      return RolePermissionResponse(
+        code: responsData.code,
+        success: responsData.success,
+        data: responseDatums,
+        message: responsData.message,
+      );
     } catch (e) {
       rethrow;
     }
